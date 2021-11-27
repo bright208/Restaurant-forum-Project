@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    redirect: '/restaurants'
+    redirect: '/signin'
   },
   {
     path: "/signin",
@@ -56,6 +56,41 @@ const routes = [
     path: "/users/:id",
     name: "profile-page",
     component: () => import('../views/User.vue')
+  },
+  {
+    path: "/users/:id/edit",
+    name: "profile-page-edit",
+    component: () => import('../views/UserEdit.vue')
+  },
+  {
+    path: "/admin/restaurants",
+    name: 'admin-restaurants',
+    component: () => import('../views/AdminRestaurants.vue')
+  },
+  {
+    path: "/admin/restaurants/new",
+    name: 'admin-restaurant-new',
+    component: () => import('../views/AdminRestaurantNew.vue')
+  },
+  {
+    path: "/admin/restaurants/:id",
+    name: 'admin-restaurants-show',
+    component: () => import('../views/AdminRestaurantShow.vue')
+  },
+  {
+    path: "/admin/restaurants/:id/edit",
+    name: 'admin-restaurants-edit',
+    component: () => import('../views/AdminRestaurantEdit.vue')
+  },
+  {
+    path: '/admin/categories',
+    name: 'admin-categories',
+    component: () => import('../views/AdminCategories.vue')
+  },
+  {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('../views/AdminUsers.vue')
   },
   {
     path: '*',

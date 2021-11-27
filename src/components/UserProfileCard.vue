@@ -18,7 +18,7 @@
           <li><strong>{{profile.Followers.length}}</strong> followers (追隨者)</li>
         </ul>
         <p>
-            <a href="/users/2/edit"><button type="submit" class="btn btn-primary" v-show="profile.isAdmin">edit</button></a>
+            <router-link :to="{name: 'profile-page-edit',params:{id:profile.id}}"><button type="submit" class="btn btn-primary" v-show="profile.isAdmin">edit</button></router-link>
             
             <button type="submit" class="btn btn-primary mr-2"
              v-show="!profile.isAdmin"

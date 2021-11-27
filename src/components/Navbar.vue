@@ -27,7 +27,7 @@
         <!-- is user is admin -->
         <router-link
              v-if="currentUser.isAdmin"
-             to="#" 
+            :to="{name: 'admin-restaurants'}"
              class="text-white mr-3"
         >
          管理員後台
@@ -36,7 +36,7 @@
         <!-- is user is login -->
           <template v-if="isAuthenticated">
           <router-link
-             to="#" 
+             :to="{name: 'profile-page',params:{id:currentUser.id}}" 
              class="text-white mr-3"
           > 
            {{currentUser.name||'使用者'}} 您好
@@ -93,6 +93,7 @@ export default{
      this.isAuthenticated=dummyUser.isAuthenticated
 
      }
+
      
    }
 }
