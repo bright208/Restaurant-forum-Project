@@ -16,7 +16,7 @@
           placeholder="email"
           autocomplete="username"
           autofocus
-          required          
+          required
         />
       </div>
 
@@ -30,11 +30,15 @@
           class="form-control"
           placeholder="Password"
           autocomplete="current-password"
-          required          
+          required
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit" :disabled="isProcessing">
+      <button
+        class="btn btn-lg btn-primary btn-block mb-3"
+        type="submit"
+        :disabled="isProcessing"
+      >
         Submit
       </button>
 
@@ -52,25 +56,25 @@
 
 <script>
 import authorizationApi from "../apis/authorization.js";
-import { Toast } from '../utils/helpers.js';
+import { Toast } from "../utils/helpers.js";
 export default {
   data() {
     return {
       email: "",
       password: "",
-      isProcessing:false
+      isProcessing: false,
     };
   },
   methods: {
     handleSubmit() {
-      if(!this.password||!this.email){
-       Toast.fire({
-          icon: 'warning',
-          title: '帳號或密碼請勿空白'
-       })
-       return
+      if (!this.password || !this.email) {
+        Toast.fire({
+          icon: "warning",
+          title: "帳號或密碼請勿空白",
+        });
+        return;
       }
-      this.isProcessing=true
+      this.isProcessing = true;
 
       authorizationApi
         .signIn({ email: this.email, password: this.password })
@@ -80,20 +84,20 @@ export default {
           if (data.status !== "success") {
             throw new Error(data.message);
           }
-
+          this.$store.commit("setCurrentUser", data.user); //將資料傳入Vuex
           localStorage.setItem("token", data.token);
-          // 成功登入後轉址到餐廳首頁
-          this.$router.push("/restaurants");
+
+          this.$router.push("/restaurants"); // 成功登入後轉址到餐廳首頁
         })
-        .catch(error=>{
-          this.password=""
+        .catch((error) => {
+          this.password = "";
           Toast.fire({
-          icon: 'warning',
-          title: '請確認您輸入了正確的帳號密碼'
-          })
-          this.isProcessing=false
-          console.log(error)
-        })
+            icon: "warning",
+            title: "請確認您輸入了正確的帳號密碼",
+          });
+          this.isProcessing = false;
+          console.log(error);
+        });
     },
   },
 };

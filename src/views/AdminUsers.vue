@@ -6,142 +6,107 @@
     <table class="table">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">
-            #
-          </th>
-          <th scope="col">
-            Email
-          </th>
-          <th scope="col">
-            Role
-          </th>
-          <th
-            scope="col"
-            width="140"
-          >
-            Action
-          </th>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+          <th scope="col">Role</th>
+          <th scope="col" width="140">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="profile in profiles" :key="profile.id">
           <th scope="row">
-            {{profile.id}}
+            {{ profile.id }}
           </th>
-          <td>{{profile.email}}</td>
-          <td>{{profile.isAdmin | userRole}}</td>
+          <td>{{ profile.email }}</td>
+          <td>{{ profile.isAdmin | userRole }}</td>
           <td>
-             <button
+            <button
               type="button"
               class="btn btn-link"
-              v-if="profile.isAdmin&&currentUser.id !==profile.id"
-              v-on:click="toggleUserRole(profile.id)"
+              v-if="profile.isAdmin && currentUser.id !== profile.id"
+              v-on:click="toggleUserRole(profile.id, profile.isAdmin)"
             >
               set as user
             </button>
-              <button
+            <button
               type="button"
               class="btn btn-link"
               v-show="!profile.isAdmin"
-              v-on:click="toggleUserRole(profile.id)"
+              v-on:click="toggleUserRole(profile.id, profile.isAdmin)"
             >
               set as admin
             </button>
-          
           </td>
-        </tr>      
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import AdminNav from '../components/AdminNav.vue'
+import AdminNav from "../components/AdminNav.vue";
+import adminAPI from "../apis/admin";
+import { Toast } from "../utils/helpers";
+import { mapState } from "vuex";
 
-const dummyData={
-       profile:[
-         {
-        "id": 1,
-        "name": "root",
-        "email": "root@example.com",
-        "password": "$2a$10$ZcshVCQ1K9jdlXi.2QZZwOqkXcdhd0e1GJNOsZ4iLv3Fgj52W8TTK",
-        "isAdmin": true,
-        "image": null,
-        "createdAt": "2021-11-10T11:38:07.000Z",
-        "updatedAt": "2021-11-10T11:38:07.000Z"
-        },
-        {
-          "id": 2,
-        "name": "user1",
-        "email": "user1@example.com",
-        "password": "$2a$10$6RuJwqrtZ7vF2rizwfA.Ven9qw4ow5YQafa0frnBwsMYdHzjox2Oe",
-        "isAdmin": false,
-        "image": null,
-        "createdAt": "2021-11-10T11:38:07.000Z",
-        "updatedAt": "2021-11-10T11:38:07.000Z"
-        },
-        {
-          "id": 3,
-        "name": "user2",
-        "email": "user2@example.com",
-        "password": "$2a$10$Lgbvi2UsgRvpH2pURwO/f.zV7uBNWi/EaDiNseuwDAqKsdN5NFzLm",
-        "isAdmin": false,
-        "image": null,
-        "createdAt": "2021-11-10T11:38:07.000Z",
-        "updatedAt": "2021-11-10T11:38:07.000Z",
+export default {
+  components: {
+    AdminNav: AdminNav,
+  },
+  data() {
+    return {
+      profiles: [],
+    };
+  },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        const { data } = await adminAPI.users.get();
+        this.profiles = data.users;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法載入使用者清單，請稍後再試",
+        });
+      }
+    },
+    async toggleUserRole(userId, isAdmin) {
+      try {
+        const { data } = await adminAPI.users.update(userId, {
+          isAdmin: (!isAdmin).toString(), //後端傳入的規格要求isAdmin的屬性值必須為字串
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-       ]
-}
-
-export default{
-
-     components:{
-      AdminNav:AdminNav
-     },
-     data(){
-       return{
-        profiles:[],
-        currentUser: {
-        id: 1,
-        name: '管理者',
-        email: 'root@example.com',
-        image: 'https://i.pravatar.cc/300',
-        isAdmin: true
-        }
-}         
-           
-     },
-     methods:{
-       fetchUser(){
-         this.profiles=dummyData.profile
-       },
-       toggleUserRole(id){
-        this.profiles=this.profiles.map(profile=>
-         {
-           if(profile.id===id){
-            return {...profile,isAdmin:!profile.isAdmin}
-           }
-          else{
-            return profile
-          }
-         }       
-        )
-       }
-     },
-     created(){
-       this.fetchUser()
-     },
-     filters:{
-       userRole(isAdmin){
-        if(isAdmin){
-          return "admin"
-        }
-        else{
-          return "user"
-        }        
-       }
-     }
-
-}
-
+        this.fetchUsers();
+        Toast.fire({
+          icon: "success",
+          title: "您已成功切換該位使用者的角色!",
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "您暫時無法更換使用者的角色，請稍後再試",
+        });
+      }
+    },
+  },
+  created() {
+    this.fetchUsers();
+  },
+  filters: {
+    userRole(isAdmin) {
+      if (isAdmin) {
+        return "admin";
+      } else {
+        return "user";
+      }
+    },
+  },
+};
 </script>

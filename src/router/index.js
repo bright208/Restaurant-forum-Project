@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'//載入套件
 import notfound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Restaurants from '../views/Restaurants.vue'
+import store from '../store'
 
 Vue.use(VueRouter)//使用套件
 
@@ -104,4 +105,8 @@ const router = new VueRouter({
   routes                  //初始化
 })
 
+router.beforeEach( (to, from, next)=>{
+  store.dispatch('fetchCurrentUser')// 使用 dispatch 呼叫 Vuex 內的 actions
+  next()
+})
 export default router

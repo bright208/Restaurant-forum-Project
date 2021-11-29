@@ -121,7 +121,7 @@ export default {
     },
     async fetchTopRestaurants() {
       try {
-        const { data } = await apiTopRestaurants.getTopRestaurants();        
+        const { data } = await apiTopRestaurants.getTopRestaurants();
         this.restaurants = data.restaurants;
       } catch (error) {
         console.log(error);
