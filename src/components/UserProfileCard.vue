@@ -57,12 +57,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import { Toast } from "../utils/helpers";
 import { emptyImageFilter } from "../utils/mixins";
 import usersAPI from "../apis/users";
+import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   props: {
     profiles: {
       type: Object,
@@ -89,9 +92,6 @@ export default {
       },
       isFollowed: this.initialIsFollowed,
     };
-  },
-  computed: {
-    ...mapState(["currentUser"]),
   },
   methods: {
     async addFollowing(userId) {

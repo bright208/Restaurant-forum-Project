@@ -40,11 +40,14 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import usersAPI from "../apis/users";
 import { Toast } from "../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       profile: {
@@ -54,9 +57,6 @@ export default {
       },
       isProcessing: false,
     };
-  },
-  computed: {
-    ...mapState(["currentUser"]),
   },
   created() {
     this.fetchUser(this.$route.params.id);

@@ -7,7 +7,6 @@
     <!-- 餐廳評論 RestaurantComments -->
     <restaurantComments
       :restaurantComments="restaurantComments"
-      :currentUser="currentUser"
       v-on:after-delete-comment="afterDeleteComment"
     />
 
@@ -26,7 +25,6 @@ import CreateComment from "../components/CreateComment.vue";
 import restaurantsAPI from "../apis/restaurants";
 import commentAPI from "../apis/comment";
 import { Toast } from "../utils/helpers";
-import { mapState } from "vuex";
 
 export default {
   components: {
@@ -50,9 +48,6 @@ export default {
       },
       restaurantComments: [],
     };
-  },
-  computed: {
-    ...mapState(["currentUser"]), //從Vuex拿到currentUser物件的資料
   },
   methods: {
     async fetchRestaurant(restaurantId) {

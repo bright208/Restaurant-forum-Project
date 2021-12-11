@@ -32,18 +32,15 @@
 import { fromNowFilter } from "../utils/mixins.js";
 import commentAPI from "../apis/comment";
 import { Toast } from "../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
-  data() {
-    return {};
+  computed: {
+    ...mapState(["currentUser"]),
   },
   props: {
     restaurantComments: {
       type: Array,
-      required: true,
-    },
-    currentUser: {
-      type: Object,
       required: true,
     },
   },

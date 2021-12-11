@@ -34,7 +34,6 @@ import RestaurantsPagination from "../components/RestaurantsPagination.vue";
 import restaurantsAPI from "../apis/restaurants.js";
 import { Toast } from "./../utils/helpers";
 
-
 export default {
   data() {
     return {
@@ -54,7 +53,7 @@ export default {
     RestaurantsPagination: RestaurantsPagination,
   },
   methods: {
-    async fetchRestaurants({ queryPage, queryCategoryId }) {
+    async fetchRestaurants(queryPage, queryCategoryId) {
       try {
         const response = await restaurantsAPI.getRestaurants({
           page: queryPage,
@@ -78,23 +77,23 @@ export default {
         this.totalPage = totalPage;
         this.previousPage = prev;
         this.nextPage = next;
-      } catch (error){
-           Toast.fire({
-          icon: 'error',
-          title: '無法取得餐廳資料，請稍後再試'
-        })
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得餐廳資料，請稍後再試",
+        });
       }
-      }
-    },  
-  created() {
-    const { page = "", categoryId = "" } = this.$route.query;
-    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId }); //載入網頁時先請求第一頁不分類別的資料
+    },
   },
-  beforeRouteUpdate(to,from,next) {
+
+  created() {
+    this.fetchRestaurants("", ""); //載入網頁時先請求第一頁不分類別的資料
+  },
+  beforeRouteUpdate(to, from, next) {
     const { page = "", categoryId = "" } = to.query;
 
-    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId });
-    next()
+    this.fetchRestaurants(page, categoryId);
+    next();
   },
 };
 </script>

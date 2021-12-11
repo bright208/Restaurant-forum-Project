@@ -23,7 +23,7 @@
             <button
               type="button"
               class="btn btn-link"
-              v-if="profile.isAdmin && currentUser.id !== profile.id"
+              v-show="profile.isAdmin && currentUser.id !== profile.id"
               v-on:click="toggleUserRole(profile.id, profile.isAdmin)"
             >
               set as user
@@ -50,6 +50,9 @@ import { Toast } from "../utils/helpers";
 import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   components: {
     AdminNav: AdminNav,
   },
@@ -57,9 +60,6 @@ export default {
     return {
       profiles: [],
     };
-  },
-  computed: {
-    ...mapState(["currentUser"]),
   },
   methods: {
     async fetchUsers() {

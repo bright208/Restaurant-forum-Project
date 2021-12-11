@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-    <router-link class="navbar-brand" to="/"> 餐廳評論網 </router-link>
+    <router-link class="navbar-brand" :to="{ name: 'restaurants' }">
+      餐廳評論網
+    </router-link>
 
     <button
       class="navbar-toggler"
@@ -36,6 +38,7 @@
           <button
             type="button"
             class="btn btn-sm btn-outline-success my-2 my-sm-0"
+            v-on:click="logout()"
           >
             登出
           </button>
@@ -51,6 +54,12 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication');
+      this.$router.push({ name: "sign-in" });
+    },
   },
 };
 </script>

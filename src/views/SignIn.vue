@@ -48,7 +48,7 @@
         </p>
       </div>
 
-      <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2021-2022</p>
     </form>
   </div>
 </template>
@@ -84,10 +84,9 @@ export default {
           if (data.status !== "success") {
             throw new Error(data.message);
           }
-          this.$store.commit("setCurrentUser", data.user); //將資料傳入Vuex
           localStorage.setItem("token", data.token);
-
-          this.$router.push("/restaurants"); // 成功登入後轉址到餐廳首頁
+          this.$store.commit("setCurrentUser", data.user);
+          this.$router.push("/restaurants");
         })
         .catch((error) => {
           this.password = "";

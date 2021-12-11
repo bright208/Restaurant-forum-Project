@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'//載入套件
 import notfound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Restaurants from '../views/Restaurants.vue'
-import store from '../store'
+import store from './../store'
 
 Vue.use(VueRouter)//使用套件
 
@@ -105,8 +105,16 @@ const router = new VueRouter({
   routes                  //初始化
 })
 
-router.beforeEach( (to, from, next)=>{
-  store.dispatch('fetchCurrentUser')// 使用 dispatch 呼叫 Vuex 內的 actions
+router.beforeEach((to, from, next) => {
+  // 使用 dispatch 呼叫 Vuex 內的 actions  
+  if (from.path === "/signin" && !localStorage.getItem('token')) {
+    this.router.push("/signin");
+  }
+  else if (to.path !== "/signin") {
+    store.dispatch('fetchCurrentUser')
+  }
+
   next()
 })
+
 export default router

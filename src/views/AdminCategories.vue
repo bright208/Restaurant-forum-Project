@@ -203,7 +203,7 @@ export default {
   },
   created() {
     this.fetchCategories();
-  },
+  }
 };
 </script>
 
